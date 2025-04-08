@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const schema = new mongoose.Schema({
-  user_id: {
-    type: String,
-    required: [true, "使用者 ID 為必填欄位"],
-    index: true,
-  },
+  // user_id: {
+  //   type: String,
+  //   required: [true, "使用者 ID 為必填欄位"],
+  //   index: true,
+  // },
   session_id: {
     type: String,
     required: [true, "對話 ID 為必填欄位"],

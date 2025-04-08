@@ -1,22 +1,43 @@
 import conversations from "../models/conversation.js";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
 /* 新增對話 */
 export const createConversation = async (req, res) => {
   try {
-    const sessionId = req.body.session_id || uuidv4(); // 後端加壓 uuid 唯一值
+    /* 後端加壓 */
+    const sessionId = req.body.session_id || uuidv4();
     const timestamp = new Date();
 
-    const result = await conversations.create({
-      user_id: req.body.user_id,
+    /* 儲存使用者訊息在 db */
+    const userMessage = await conversations.create({
       session_id: sessionId,
       role: req.body.role,
       content: req.body.content,
       timestamp,
     });
-    res
-      .status(200)
-      .send({ success: true, message: "成功建立對話紀錄", result });
+
+    /* call fast API */
+    const llmResponse = await axios.post("http://localhost:8000/rag", {
+      query: req.body.content,
+    });
+
+    /* 儲存 LLM 回覆在 db */
+    const assistantMessage = await conversations.create({
+      user_id: req.body.user_id,
+      session_id: sessionId,
+      role: "assistant",
+      content: llmResponse.data.response.answer,
+      timestamp: new Date(),
+    });
+
+    /* 回傳問答給前端 */
+    res.status(200).send({
+      success: true,
+      message: "成功建立對話並取得回應",
+      assistant_message: assistantMessage,
+      llm_response: llmResponse.data.response.answer,
+    });
   } catch (error) {
     if (error.name === "ValidationError") {
       const key = Object.keys(error.errors)[0];
