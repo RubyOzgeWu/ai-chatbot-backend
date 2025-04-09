@@ -36,7 +36,7 @@ export const createConversation = async (req, res) => {
       success: true,
       message: "成功建立對話並取得回應",
       assistant_message: assistantMessage,
-      llm_response: llmResponse.data.response.answer,
+      // llm_response: llmResponse.data.response.answer,
     });
   } catch (error) {
     if (error.name === "ValidationError") {
