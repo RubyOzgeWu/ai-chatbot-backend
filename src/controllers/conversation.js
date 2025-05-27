@@ -21,15 +21,21 @@ export const createConversation = async (req, res) => {
     });
 
     /* call fast API */
+    // const llmResponse = await axios.post(
+    //   "https://15f9-125-228-140-213.ngrok-free.app/rag",
+    //   {
+    //     query: req.body.content,
+    //   },
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${process.env.FASTAPI_TOKEN}`,
+    //     },
+    //   }
+    // );
     const llmResponse = await axios.post(
       "https://15f9-125-228-140-213.ngrok-free.app/rag",
       {
         query: req.body.content,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.FASTAPI_TOKEN}`,
-        },
       }
     );
     /* http://localhost:8000/rag */
