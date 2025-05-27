@@ -18,9 +18,10 @@ export const createConversation = async (req, res) => {
     });
 
     /* call fast API */
-    const llmResponse = await axios.post("http://localhost:8000/rag", {
+    const llmResponse = await axios.post("https://15f9-125-228-140-213.ngrok-free.app/rag", {
       query: req.body.content,
     });
+    /* http://localhost:8000/rag */
 
     /* 儲存 LLM 回覆在 db */
     const assistantMessage = await conversations.create({
