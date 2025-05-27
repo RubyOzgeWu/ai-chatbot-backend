@@ -1,6 +1,9 @@
 import conversations from "../models/conversation.js";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 /* 新增對話 */
 export const createConversation = async (req, res) => {
@@ -18,9 +21,17 @@ export const createConversation = async (req, res) => {
     });
 
     /* call fast API */
-    const llmResponse = await axios.post("https://15f9-125-228-140-213.ngrok-free.app/rag", {
-      query: req.body.content,
-    });
+    const llmResponse = await axios.post(
+      "https://15f9-125-228-140-213.ngrok-free.app/rag",
+      {
+        query: req.body.content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.FASTAPI_TOKEN}`,
+        },
+      }
+    );
     /* http://localhost:8000/rag */
 
     /* 儲存 LLM 回覆在 db */
