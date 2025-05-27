@@ -28,13 +28,18 @@ const limiter = rateLimit({
 app.use(limiter);
 
 /* 中介層 */
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://ai-chatbot-zeta-flax.vercel.app",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(mongoSanitize());
 
 /* 路由 */
-app.use("/api/users", userRouter);  // 路由前綴 
-app.use("/api/conversations", conversationRouter);  
+app.use("/api/users", userRouter); // 路由前綴
+app.use("/api/conversations", conversationRouter);
 
 /* 404 處理 */
 app.all("*", (req, res) => {
