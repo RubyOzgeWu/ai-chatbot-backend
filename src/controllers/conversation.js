@@ -7,6 +7,7 @@ dotenv.config();
 
 /* 新增對話 */
 export const createConversation = async (req, res) => {
+  const llmUrl = process.env.LLM_URL;
   try {
     /* 後端加壓 */
     const sessionId = req.body.session_id || uuidv4();
@@ -32,12 +33,9 @@ export const createConversation = async (req, res) => {
     //     },
     //   }
     // );
-    const llmResponse = await axios.post(
-      "https://15f9-125-228-140-213.ngrok-free.app/rag",
-      {
-        query: req.body.content,
-      }
-    );
+    const llmResponse = await axios.post(`${llmUrl}/rag`, {
+      query: req.body.content,
+    });
     /* http://localhost:8000/rag */
 
     /* 儲存 LLM 回覆在 db */
